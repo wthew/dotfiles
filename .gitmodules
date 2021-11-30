@@ -1,0 +1,3 @@
+[submodule "dotfiles.neovim"]
+	path = dotfiles.neovim
+	url = git@github.com:wthew/dotfiles.neovim.git
