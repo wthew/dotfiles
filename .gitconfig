@@ -1,0 +1,49 @@
+[alias]
+  c = !git add -A && git commit -m
+  m = !git add -A && git commit --edit
+
+  s = status -sb
+  sf = show --name-only
+
+  ch = checkout
+  mkb = checkout -b
+  rmb = branch -d
+  frmb = branch -D
+  ls = branch --list
+
+  l = log --all --decorate --graph --full-history --color --pretty=format:\"%C(blue)[%h] %C(yellow)%cr %C(green)[%an]%C(bold)%C(magenta)%d %n%C(cyan)%s%n%b%n\" --
+
+  incoming = !(git fetch --quiet && git log --pretty=format:\"%C(blue)[%h] %C(yellow)%ci %C(green)[%ae]%n%C(cyan)%s%n%b%n\" ..@{u})
+  outgoing = !(git fetch --quiet && git log --pretty=format:\"%C(blue)[%h] %C(yellow)%ci %C(green)[%ae]%n%C(cyan)%s%n%b%n\" @{u}..)
+
+  append = commit --amend --no-edit
+  append-all = !(git add -A && git append)
+  rename = commit --amend
+
+  unstage = reset HEAD --
+  rollback = reset --soft HEAD~1
+  discard= reset --hard
+
+  back = switch -
+
+[core]
+	editor = code --wait
+	filemode = false
+	autocrlf = false
+
+[credential "https://github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
+
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
+
+[credential]
+	helper = store
+
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
