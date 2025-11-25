@@ -26,10 +26,17 @@ return require('packer').startup(function()
   use { "akinsho/toggleterm.nvim", tag = '*' }
   use 'luckasRanarison/tailwind-tools.nvim'
   use {
-  "startup-nvim/startup.nvim",
-  requires = {"nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim", "nvim-telescope/telescope-file-browser.nvim"},
-  config = function()
-    require"startup".setup()
-  end
-}
+    "startup-nvim/startup.nvim",
+    requires = {"nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim", "nvim-telescope/telescope-file-browser.nvim"},
+    config = function()
+      require"startup".setup()
+    end
+  }
+  use {
+    "pmizio/typescript-tools.nvim",
+    requires = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+    config = function()
+      require("typescript-tools").setup {}
+    end,
+    }
 end)

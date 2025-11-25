@@ -1,13 +1,29 @@
-if status is-interactive
-    # Commands to run in interactive sessions can go here
-    #
+function fish_prompt -d "Write out the prompt"
+    # This shows up as USER@HOST /home/user/ >, with the directory colored
+    # $USER and $hostname are set by fish, so you can just use them
+    # instead of using `whoami` and `hostname`
+    printf '%s@%s %s%s%s > ' $USER $hostname \
+        (set_color $fish_color_cwd) (prompt_pwd) (set_color normal)
+end
 
+if status is-interactive # Commands to run in interactive sessions can go here
+
+    # No greeting
+    set fish_greeting
+
+    # Use starship
     starship init fish | source
+    if test -f ~/.local/state/quickshell/user/generated/terminal/sequences.txt
+        cat ~/.local/state/quickshell/user/generated/terminal/sequences.txt
+    end
+
+    alias pamcan pacman
+    alias clear "printf '\033[2J\033[3J\033[1;1H'"
+    alias q 'qs -c ii'
+    
 end
 
 
-
-# ASDF configuration code
 if test -z $ASDF_DATA_DIR
     set _asdf_shims "$HOME/.asdf/shims"
 else
@@ -22,7 +38,14 @@ end
 set --erase _asdf_shims
 
 # Created by `pipx` on 2025-04-09 20:15:03
-set PATH $PATH /home/thw/.local/bin
+set PATH $PATH /home/well/.local/bin
 
 
-alias l="exa -l --icons --grid --classify --colour=auto --sort=type --group-directories-first --header --modified --created --git --binary --group"
+alias l="exa -l --icons --classify --colour=auto --sort=type --group-directories-first --header --modified --created --git --binary --group"
+
+
+set -gx ANDROID_SDK_ROOT "/opt/android-sdk"
+set -gx PATH "$PATH:$ANDROID_SDK_ROOT/platform-tools"
+set -gx PATH "$PATH:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin"
+set -gx PATH "$PATH:$ANDROID_SDK_ROOT/tools/bin"
+

@@ -10,9 +10,9 @@ require('nvim-autopairs').setup({
   enable_check_bracket_line = false
 })
 
-require("tailwind-tools").setup({
+-- require("tailwind-tools").setup({
   -- your configuration
-})
+-- })
 
 -- disable netrw at the very start of your init.lua (strongly advised)
 vim.g.loaded_netrw = 1
@@ -23,7 +23,7 @@ local HEIGHT_RATIO = 0.8 -- You can change this
 local WIDTH_RATIO = 0.75 -- You can change this too
 
 
-vim.api.nvim_set_keymap("n", "<C-S-e>", ":NvimTreeToggle<cr>", { silent = true, noremap = true })
+vim.api.nvim_set_keymap("n", "<C-e>", ":NvimTreeToggle<cr>", { silent = true, noremap = true })
 vim.api.nvim_set_keymap("n", "<A-j>", ":m .+1<CR>==", { silent = true, noremap = true })     -- move line up(n)
 vim.api.nvim_set_keymap("n", "<A-k>", ":m .-2<CR>==", { silent = true, noremap = true })     -- move line down(n)
 vim.api.nvim_set_keymap("v", "<A-j>", ":m '>+1<CR>gv=gv", { silent = true, noremap = true }) -- move line up(v)
@@ -108,23 +108,6 @@ require("nvim-tree").setup {
 }
 
 
--- Configuração do LSP para TypeScript
-local nvim_lsp = require('lspconfig')
-
-nvim_lsp.emmet_ls.setup({
-  -- on_attach = on_attach,
-  -- capabilities = capabilities,
-  filetypes = { "css", "eruby", "html", "javascript", "javascriptreact", "less", "sass", "scss", "svelte", "pug", "typescriptreact", "vue" },
-  init_options = {
-    html = {
-      options = {
-        -- For possible options, see: https://github.com/emmetio/emmet/blob/master/src/config.ts#L79-L267
-        ["bem.enabled"] = true,
-      },
-    },
-  }
-})
-
 local format_augroup = vim.api.nvim_create_augroup("LSPFormatting", {})
 local function on_attach(client, buffer)
   if not client.supports_method("textDocument/formatting") then
@@ -157,49 +140,6 @@ local function on_attach(client, buffer)
   })
 end
 
-
--- TypeScript
-nvim_lsp.ts_ls.setup {
-  on_attach = on_attach,
-  filetypes = { "typescript", "typescriptreact", "typescript.tsx" },
-  cmd = { "typescript-language-server", "--stdio" }
-}
-
-nvim_lsp.pyright.setup {}
-
-nvim_lsp.lua_ls.setup {
-  on_init = function(client)
-    if client.workspace_folders then
-      local path = client.workspace_folders[1].name
-      if vim.loop.fs_stat(path .. '/.luarc.json') or vim.loop.fs_stat(path .. '/.luarc.jsonc') then
-        return
-      end
-    end
-
-    client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
-      runtime = {
-        -- Tell the language server which version of Lua you're using
-        -- (most likely LuaJIT in the case of Neovim)
-        version = 'LuaJIT'
-      },
-      -- Make the server aware of Neovim runtime files
-      workspace = {
-        checkThirdParty = false,
-        library = {
-          vim.env.VIMRUNTIME
-          -- Depending on the usage, you might want to add additional paths here.
-          -- "${3rd}/luv/library"
-          -- "${3rd}/busted/library",
-        }
-        -- or pull in all of 'runtimepath'. NOTE: this is a lot slower and will cause issues when working on your own configuration (see https://github.com/neovim/nvim-lspconfig/issues/3189)
-        -- library = vim.api.nvim_get_runtime_file("", true)
-      }
-    })
-  end,
-  settings = {
-    Lua = {}
-  }
-}
 
 local has_any_words_before = function()
   if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then
